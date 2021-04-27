@@ -1,11 +1,11 @@
 function Obstacle() {
-	this.speed = 3;
+	this.speed = 4;
 	this.y = 0;
 	this.x = random(0+20, width-20)
 
 	this.show = function() {
 		fill(255);
-		rect(this.x, this.y, 20, 20);
+		rect(this.x, this.y, 100, 20);
 	}
 
 	this.move = function() {
@@ -43,13 +43,13 @@ function Player() {
 
 	this.show = function() {
 		fill(255);
-		ellipse(this.x, height-20, 20, 20);
+		ellipse(this.x, height-80, 20, 20);
 	}
 
 	this.move = function(dir) {
 		// Checks if the player has hit the walls
-		if (dir == -1 && this.x < this.size) {return 0; }
-		if (dir == 1 && this.x > width-this.size) {return 0; }
+		if (dir == -1 && this.x < this.size) { return 0; }
+		if (dir == 1 && this.x > width-this.size) { return 0; }
 		// Move the player based on direction and speed
 		this.x += dir * this.speed;
 	}
@@ -65,7 +65,7 @@ function Player() {
 }
 
 function setup() {
-	createCanvas(400, 300);
+	createCanvas(windowWidth/2, windowHeight-50);
 	player = new Player();
 	obstacles = new Obstacles();
 	frequency = 14;
@@ -73,7 +73,7 @@ function setup() {
 }
   
 function draw() {
-	background(51);
+	background(50);
 	player.show();
 	player.position_update();
 
