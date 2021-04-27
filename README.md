@@ -1,5 +1,11 @@
 # rocket-pinball
 
+## Running
+```
+# Open the index.html in your broswer
+firefox index.html # Ex. firefox
+```
+
 ### Current progress
 Here are the decisions that have been made about the pinball game.
 The game won't be the standard pinball game.

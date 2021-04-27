@@ -71,7 +71,7 @@ function setup() {
 	frequency = 14;
 	scene_num = 0;
 }
-  
+
 function draw() {
 	background(50);
 	player.show();
