@@ -1,10 +1,10 @@
-var url = "https://github.com/JakeRoggenbuck/rocket-pinball/"
+var url = "https://raw.githubusercontent.com/JakeRoggenbuck/rocket-pinball/"
 
 function get_file_url(name) {
 	// Files need to be on a local server or hosted online,
 	// so the github is probably the best place, so this
 	// function wraps and name with the url
-	return url + "blob/main/" + name;
+	return url + "main/" + name;
 }
 
 function Obstacle() {
@@ -54,8 +54,7 @@ function Player() {
 
 	this.show = function() {
 		fill(255);
-		ellipse(this.x, height-80, 20, 20);
-		image(img, this.x, height-80);
+		image(this.img, this.x, height-100);
 	}
 
 	this.move = function(dir) {
