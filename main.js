@@ -15,19 +15,20 @@ function Obstacle() {
 
 function Obstacles() {
 	this.obstacles = [];
-	
+
 	this.add = function() {
-		obstacles.push(new Obstacle())
+		this.obstacles.push(new Obstacle())
 	}
 
 	this.draw = function() {
-		for (var i = 0; i < this.obstacles.length; i++) {
+		for (var i = 0; i < this.obstacles.length-1; i++) {
 			obs = this.obstacles[i];
 			obs.show();
+			obs.move();
 
 			// Delete the obstacle if it's left the screen
 			if (obs.y > height + 20) {
-				delete this.obstacles[i];
+				this.obstacles.splice(i, 1)
 			}
 		}
 	}
@@ -66,6 +67,9 @@ function Player() {
 function setup() {
 	createCanvas(400, 300);
 	player = new Player();
+	obstacles = new Obstacles();
+	frequency = 14;
+	scene_num = 0;
 }
   
 function draw() {
@@ -73,4 +77,10 @@ function draw() {
 	player.show();
 	player.position_update();
 
+	if (scene_num == frequency) {
+		obstacles.add();
+		scene_num = 0;
+	}
+	scene_num += 1;
+	obstacles.draw();
 }
