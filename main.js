@@ -1,3 +1,12 @@
+var url = "https://github.com/JakeRoggenbuck/rocket-pinball/"
+
+function get_file_url(name) {
+	// Files need to be on a local server or hosted online,
+	// so the github is probably the best place, so this
+	// function wraps and name with the url
+	return url + "blob/main/" + name;
+}
+
 function Obstacle() {
 	this.speed = 4;
 	this.y = 0;
@@ -41,9 +50,12 @@ function Player() {
 	// Used for wall bouncing
 	this.size = 15;
 
+	this.img = loadImage(get_file_url("images/player.png"));
+
 	this.show = function() {
 		fill(255);
 		ellipse(this.x, height-80, 20, 20);
+		image(img, this.x, height-80);
 	}
 
 	this.move = function(dir) {
