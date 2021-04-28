@@ -1,8 +1,3 @@
-function calculate_score(total_obs) {
-	// TODO: Factor in other game objectives
-	return total_obs * 10;
-}
-
 function Obstacle() {
 	this.speed = 4;
 	this.y = 0;
@@ -51,7 +46,7 @@ function Player() {
 
 	this.show = function() {
 		fill(255);
-		ellipse(this.x, height-80, 20, 20);
+		ellipse(this.x, height-80, 40, 40);
 	}
 
 	this.move = function(dir) {
@@ -72,29 +67,64 @@ function Player() {
 	}
 }
 
+function Score() {
+	this.calculate_score = function(total_obs) {
+		return total_obs * 10;
+	}
+
+	this.score = this.calculate_score(0);
+
+	this.draw = function() {
+		textSize(32);
+		text(this.score, 10, 30);
+	}
+
+	this.update_score = function(total_obs) {
+		this.score = this.calculate_score(total_obs);
+	}
+}
+
 function setup() {
-	createCanvas(windowWidth/2, windowHeight-50);
+	createCanvas(min(windowWidth/2, 600), windowHeight-50);
 
 	RIGHT_EDGE = width - 140;
 	BELOW_SCREEN = height + 20;
 
 	PLAYER = new Player();
 	OBSTACLES = new Obstacles();
+	SCORE = new Score();
 
 	OBS_FREQUENCY = 30;
 	SCENE_NUM = 0;
 	TOTAL_OBS = 0;
+
+	// 0: start, 1: fly, 2: launch
+	// If there is a good way to do enums, fix this
+	CURRENT_STAGE = 0;
+
+	fly = function() { CURRENT_STAGE = 1; SCENE_NUM = 30; removeElements(); };
+	button = createButton("Start");
+	button.position((windowWidth/2) - 100, windowHeight/2);
+	button.mousePressed(fly);
 }
 
 function draw() {
 	background(50);
+
 	PLAYER.show();
 	PLAYER.position_update();
 	OBSTACLES.draw();
 
-	if (SCENE_NUM == OBS_FREQUENCY) {
-		OBSTACLES.add();
-		SCENE_NUM = 0;
+	console.log(CURRENT_STAGE);
+
+	SCORE.draw();
+	SCORE.update_score(TOTAL_OBS);
+
+	if (CURRENT_STAGE == 1) {
+		if (SCENE_NUM == OBS_FREQUENCY) {
+			OBSTACLES.add();
+			SCENE_NUM = 0;
+		}
 	}
 	SCENE_NUM += 1;
 }
