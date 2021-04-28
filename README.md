@@ -4,10 +4,18 @@
      alt="Main Page" width="400" height="410" />
 
 
+## Setup
+```
+pip3 install -r requirements.txt
+```
+
 ## Running
 ```
-# Open the index.html in your broswer
-firefox index.html # Ex. firefox
+# Start the HTTP server
+python3 app.py
+
+# Start the score REST API
+uvicorn app:APP --reload --port 8081
 ```
 
 ### Current progress
