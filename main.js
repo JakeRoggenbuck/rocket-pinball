@@ -1,15 +1,15 @@
 function Obstacle() {
 	this.speed = 4;
 	this.y = 0;
-	this.x = random(0+20, width-20)
+	this.x = random(0, RIGHT_EDGE)
 
 	this.show = function() {
 		fill(255);
-		rect(this.x, this.y, 100, 20);
+		rect(this.x, this.y, 140, 20);
 	}
 
 	this.move = function() {
-		this.y += 1 * this.speed;
+		this.y += this.speed;
 	}
 }
 
@@ -21,13 +21,16 @@ function Obstacles() {
 	}
 
 	this.draw = function() {
+		console.log(this.obstacles.length);
 		for (var i = 0; i < this.obstacles.length-1; i++) {
 			obs = this.obstacles[i];
 			obs.show();
 			obs.move();
 
+			obs.speed += 0.04;
+
 			// Delete the obstacle if it's left the screen
-			if (obs.y > height + 20) {
+			if (obs.y > BELOW_SCREEN) {
 				this.obstacles.splice(i, 1)
 			}
 		}
@@ -66,9 +69,13 @@ function Player() {
 
 function setup() {
 	createCanvas(windowWidth/2, windowHeight-50);
+
+	RIGHT_EDGE = width - 140;
+	BELOW_SCREEN = height + 20;
+
 	player = new Player();
 	obstacles = new Obstacles();
-	frequency = 14;
+	frequency = 26;
 	scene_num = 0;
 }
 
