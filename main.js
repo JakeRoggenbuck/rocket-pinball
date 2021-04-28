@@ -68,11 +68,10 @@ function Player() {
 }
 
 function Score() {
+	this.score = 0;
 	this.calculate_score = function(total_obs) {
 		return total_obs * 10;
 	}
-
-	this.score = this.calculate_score(0);
 
 	this.draw = function() {
 		textSize(32);
@@ -103,6 +102,7 @@ function setup() {
 	CURRENT_STAGE = 0;
 
 	fly = function() { CURRENT_STAGE = 1; SCENE_NUM = 30; removeElements(); };
+	// Create a start botton in the center
 	button = createButton("Start");
 	button.position((windowWidth/2) - 100, windowHeight/2);
 	button.mousePressed(fly);
@@ -114,8 +114,6 @@ function draw() {
 	PLAYER.show();
 	PLAYER.position_update();
 	OBSTACLES.draw();
-
-	console.log(CURRENT_STAGE);
 
 	SCORE.draw();
 	SCORE.update_score(TOTAL_OBS);
