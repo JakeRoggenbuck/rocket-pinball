@@ -1,9 +1,17 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import urllib
+from fastapi import FastAPI
 
 import os.path
 import sqlite3
-import json
+
+
+class Score:
+    def __init__(self, sql_score):
+        self.index, self.name, self.score = sql_score
+
+    def __dict__(self):
+        return {"name": self.name, "score": self.score}
 
 
 class Database:
@@ -63,16 +71,7 @@ class Database:
 
 
 class RequestServer(BaseHTTPRequestHandler):
-    db = Database()
-
     def do_GET(self):
-        if self.headers.get("score"):
-            self.send_response(200)
-            scores = self.db.read_all()
-            self.end_headers()
-            self.wfile.write(bytes(json.dumps({"scores": scores}), "utf-8"))
-            return 0
-
         if self.path == '/':
             self.path = '/index.html'
 
@@ -86,23 +85,39 @@ class RequestServer(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes(file_to_open, 'utf-8'))
 
-    def do_POST(self):
-        length = self.headers['Content-Length']
-        if length is not None:
-            length = int(length)
-
-        post_data = urllib.parse.parse_qs(self.rfile.read(length).decode('utf-8'))
-        if (score := post_data.get("score")) and (name := post_data.get("name")):
-            (score,) = score
-            (name,) = name
-            self.db.write_score(name, score)
-
 
 class Server(HTTPServer):
     def __init__(self, server_address, server):
         super().__init__(server_address, server)
         host, port = self.server_address
         print(f"Server hosted at http://{host}:{port}")
+
+
+APP = FastAPI()
+DB = Database()
+
+
+def get_top_scores():
+    scores = [Score(x) for x in DB.read_all()]
+    return sorted(scores, key=lambda x: x.score, reverse=True)[0:20]
+
+
+@APP.get("/")
+def root():
+    return "API"
+
+
+@APP.get("/send")
+def submit_score(name: str, score: int):
+    print(score, name)
+    if isinstance(name, str) and isinstance(score, int):
+        DB.write_score(name, score)
+        print(f"Writing score of {score} for {name}")
+
+
+@APP.get("/scores")
+def get_scores():
+    return [x.__dict__() for x in get_top_scores()]
 
 
 if __name__ == "__main__":
