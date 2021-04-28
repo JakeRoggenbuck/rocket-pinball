@@ -1,3 +1,8 @@
+function calculate_score(total_obs) {
+	// TODO: Factor in other game objectives
+	return total_obs * 10;
+}
+
 function Obstacle() {
 	this.speed = 4;
 	this.y = 0;
@@ -14,16 +19,16 @@ function Obstacle() {
 }
 
 function Obstacles() {
-	this.obstacles = [];
+	this.OBSTACLES = [];
 
 	this.add = function() {
-		this.obstacles.push(new Obstacle())
+		this.OBSTACLES.push(new Obstacle())
+		TOTAL_OBS += 1;
 	}
 
 	this.draw = function() {
-		console.log(this.obstacles.length);
-		for (var i = 0; i < this.obstacles.length-1; i++) {
-			obs = this.obstacles[i];
+		for (var i = 0; i < this.OBSTACLES.length-1; i++) {
+			obs = this.OBSTACLES[i];
 			obs.show();
 			obs.move();
 
@@ -31,7 +36,7 @@ function Obstacles() {
 
 			// Delete the obstacle if it's left the screen
 			if (obs.y > BELOW_SCREEN) {
-				this.obstacles.splice(i, 1)
+				this.OBSTACLES.splice(i, 1)
 			}
 		}
 	}
@@ -50,19 +55,19 @@ function Player() {
 	}
 
 	this.move = function(dir) {
-		// Checks if the player has hit the walls
+		// Checks if the PLAYER has hit the walls
 		if (dir == -1 && this.x < this.size) { return 0; }
 		if (dir == 1 && this.x > width-this.size) { return 0; }
-		// Move the player based on direction and speed
+		// Move the PLAYER based on direction and speed
 		this.x += dir * this.speed;
 	}
 
 	this.position_update = function() { 
 		// Check what keys are down
 		if (keyIsDown(RIGHT_ARROW)) {
-			player.move(1);
+			PLAYER.move(1);
 		} else if (keyIsDown(LEFT_ARROW)) {
-			player.move(-1);
+			PLAYER.move(-1);
 		}
 	}
 }
@@ -73,21 +78,23 @@ function setup() {
 	RIGHT_EDGE = width - 140;
 	BELOW_SCREEN = height + 20;
 
-	player = new Player();
-	obstacles = new Obstacles();
-	frequency = 26;
-	scene_num = 0;
+	PLAYER = new Player();
+	OBSTACLES = new Obstacles();
+
+	OBS_FREQUENCY = 30;
+	SCENE_NUM = 0;
+	TOTAL_OBS = 0;
 }
 
 function draw() {
 	background(50);
-	player.show();
-	player.position_update();
+	PLAYER.show();
+	PLAYER.position_update();
+	OBSTACLES.draw();
 
-	if (scene_num == frequency) {
-		obstacles.add();
-		scene_num = 0;
+	if (SCENE_NUM == OBS_FREQUENCY) {
+		OBSTACLES.add();
+		SCENE_NUM = 0;
 	}
-	scene_num += 1;
-	obstacles.draw();
+	SCENE_NUM += 1;
 }
