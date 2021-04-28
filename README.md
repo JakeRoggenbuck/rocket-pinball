@@ -1,5 +1,9 @@
 # rocket-pinball
 
+<img src="https://user-images.githubusercontent.com/35516367/116340998-f6a5ee00-a794-11eb-9b2d-0ce395c5149a.png?raw=true"
+     alt="Main Page" width="400" height="410" />
+
+
 ## Running
 ```
 # Open the index.html in your broswer
