@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import urllib
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 import os.path
 import sqlite3
@@ -95,6 +96,19 @@ class Server(HTTPServer):
 
 APP = FastAPI()
 DB = Database()
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+APP.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_top_scores():
